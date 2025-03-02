@@ -32,8 +32,6 @@ RUN conda init bash
 # Change shell to ensure Conda is available in future commands
 SHELL ["/bin/bash", "-c"]
 
-COPY wmh.yml /wmh_seg/
-
 # Create Conda environment
 RUN cd /wmh_seg && \
     conda env create -f wmh.yml -n wmh
