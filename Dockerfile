@@ -6,12 +6,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install dependencies
 RUN apt update && \
     apt install -y --no-install-recommends \
-    vim \
     git \
     python3 \
     python3-pip \
-    wget && \
-    rm -rf /var/lib/apt/lists/*
+    wget
 
 # Clone repository and download model file
 RUN git clone https://github.com/jinghangli98/wmh_seg.git /wmh_seg && \
@@ -32,6 +30,8 @@ RUN conda init bash
 # Change shell to ensure Conda is available in future commands
 SHELL ["/bin/bash", "-c"]
 
+COPY wmh.yml /wmh_seg/
+
 # Create Conda environment
 RUN cd /wmh_seg && \
     conda env create -f wmh.yml -n wmh
@@ -43,5 +43,8 @@ ENV PATH="$wmh_seg_home:$PATH"
 # Set Conda environment to be activated in every new shell
 RUN echo "conda activate wmh" >> ~/.bashrc
 
-# Default command (opens an interactive shell with Conda activated)
-CMD ["bash", "-i"]
+# Use conda run to ensure correct environment
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "wmh"]
+
+# Default command
+CMD ["python", "/wmh_seg/wmh_seg"]

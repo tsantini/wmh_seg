@@ -64,6 +64,11 @@ ls *.nii | parallel --jobs 6 wmh_seg -i {} -o {.}_wmh.nii.gz -g
 ```
 This line of bash command would process all the .nii files on gpu in the current directory, 6 files at a time. (You might need to install GNU parallel)
 
+### Docker usage example
+docker build -t wmh_seg .
+docker run -v $PWD:/data -w /data wmh_seg wmh_seg -i FLAIR.nii -o FLAIR_wmh.nii
+
+
 ## Citation
 If you find this useful for your research, please use this bibtex to cite this repository:
 ```
